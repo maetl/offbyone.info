@@ -1,0 +1,16 @@
+---
+layout: post
+title:  Thinking in Resources
+date:   2013-07-16 13:16:21
+categories: hypermedia
+---
+
+...
+
+...
+
+...
+
+...
+
+...

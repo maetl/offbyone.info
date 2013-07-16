@@ -1,0 +1,14 @@
+---
+layout: default
+title: Off By One
+---
+
+<div id="home">
+  <h1>Off By One</h1>
+  <p>There are only two hard problems in computing: cache invalidation and naming things</p>
+  <ul class="posts">
+    {% for post in site.posts %}
+      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
