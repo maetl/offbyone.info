@@ -1,2 +1,3 @@
 name: Off By One
 pygments: true
+permalink: /essays/:title/ 
