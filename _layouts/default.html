@@ -4,40 +4,38 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>{{ page.title }}</title>
-        <meta name="viewport" content="width=device-width">
 
-        <!-- syntax highlighting CSS -->
-        <link rel="stylesheet" href="/css/syntax.css">
+		<!--iPhone specific-->
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+		<link href="images/icon.png" rel="apple-touch-icon" /> 
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="/css/main.css">
+		<link type="text/css" rel="stylesheet" media="screen" href="/css/baseline.css">
+		<link type="text/css" rel="stylesheet" media="only screen and (max-device-width: 480px)" href="/css/baseline-iphone.css">
 
+		<script type="text/javascript" src="//use.typekit.net/hny4mlx.js"></script>
+		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		
+		<link type="text/css" rel="stylesheet" media="screen" href="/css/text.css">
+
+		<!--<script type="text/javascript" src="scripts/html5.js"></script>-->
+		<style>
+		
+		</style>
     </head>
     <body>
 
-        <div class="container">
-          <div class="site">
-            <div class="header">
-              <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-              <a class="extra" href="/">home</a>
-            </div>
+		<body class="page-grid">
+			<div id="page">
+				<div class="full layout-grid">
+					<header class="column width4">
+						
+					</header>
 
                 {{ content }}
 
-            <div class="footer">
-              <div class="contact">
-                <p>
-                  &copy; maetl.net 2013
-                </p>
-              </div>
-              <div class="contact">
-                <p>
-                  <a href="http://github.com/maetl">github.com/maetl</a><br />
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> <!-- /container -->
+            	<footer class="full">
+					<p><small>&copy; maetl 2013</p>
+				</footer>
 
     </body>
 </html>

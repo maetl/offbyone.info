@@ -1,9 +1,16 @@
 ---
 layout: default
 ---
-<h2>{{ page.title }}</h2>
-<p class="meta">{{ page.date | date_to_string }}</p>
-
-<div class="post">
-{{ content }}
+<div class="full layout-grid">
+	<section class="width4">
+		<div class="column width3 first grid-example">
+			<h2>{{ page.title }}</h2>
+			<p class="meta">{{ page.date | date_to_string }}</p>
+			{{ content }}
+		</div>
+		<div class="column width1 grid-example">
+			<h1>Off <span>by</span> One</h1>
+			<p class="subtitle">There are only two hard problems in computing: cache invalidation and naming things.</p>
+		</div>
+	</section>
 </div>

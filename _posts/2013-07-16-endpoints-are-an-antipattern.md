@@ -5,25 +5,117 @@ date:   2013-07-16 13:16:21
 categories: naming
 ---
 
-Microsoft, Google, and many other online service providers use the word ‘endpoint’ to describe the primary operations and resources of their platform APIs. The word is scattered everywhere you look throughout the documentation of other popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
+**It has taken a fair amount of willpower and self-discipline, but in recent weeks I’ve managed to entirely eliminate the word ‘endpoint’ from my software design vocabulary. There are far more coherent and constructive ways of talking about web APIs. This essay explains why I’ve made this decision and the consequences that flow from a mindset of thinking in resources.**
 
-[GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept.
+The word ‘endpoint’ is scattered everywhere you look throughout the documentation of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
 
-Superficially, most web APIs can easily be described as a collection of endpoints. They have identifiers exposed as URLS which form the public surface area of their capabilities. Each URL generally defines a specific entity within the host system which can receive messages in the form of HTTP requests.
+The common usage of endpoint denotes an addressable resource—usually an HTTP accessible URL—but other somewhat contradictory definitions exist. In the enterprise SOA world, there’s a nebulous definition of endpoint as the entry point to an implementation. In the Microsoft world, endpoint is an overloaded term, referring to both target devices for platform services and communications bindings for addressable services. [GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept. The fervid term has spread far and wide across the software industry, leaving [confusion and miscommunication](http://stackoverflow.com/questions/5034412/api-endpoint-semantics) in its wake.
 
-But the word endpoint itself evokes dire images of web service binding protocols instantiating service receivers; remote procedure calls aiming at parameterized targets. In short: everything that REST and hypermedia is not.
+Most web APIs can easily be described as sets of endpoints. They have identifiers exposed as URLS which form the public surface area of their capabilities. Each URL generally exposes a specific entity within the host system which can receive messages in the form of HTTP requests.
 
-It’s no coincidence that so many of public web APIs rely on vast amounts of documentation and a myriad of HTTP clients and wrapping libraries in order to be used effectively.
+It’s no coincidence that so many APIs designed this way rely on vast amounts of documentation and a myriad of HTTP clients and wrapping libraries in order to be used effectively.
 
-Many architects of endpoints are making a fundamental mistake in assuming that what API consumers want is access to data defined as resources. But exposing APIs with a uniform interface of verbs acting on the resources isn’t enough.
+Such APIs seem to be constructed from the assumption that what consumers want is access to discrete sets of data defined as resources. But humans think in terms of processes and relationships; causes and effects. Most useful applications are designed around state machines that can manipulate resources, not generic CRUD. This means that when designing a service, it’s crucial to focus on the transitions between resources and expose relationships where the meaning of a resource is defined by reference to other resources. Exposing data with a uniform interface of verbs acting on nouns isn’t enough. 
 
-What API consumers really want is access to state machines that can manipulate resources.
+If a service doesn’t provide links that expose activities and relationships as state transitions, following a workflow or completing a task through an API requires a manual sequence of calls that can’t be automated. The result is that consumers *need* all that detailed documentation to hard-code the API structure into their clients.
 
-The missing links are the transitions between resources: relationships where the meaning of a resource is defined by reference to other resources.
+This leaves many API designers stuck in a local maxima of the hypermedia maturity heuristic. They get to the point of exposing a clean vocabulary with nice resource URLs and uniform verbs, but fall short at cohesive link relationships amongst the resources.
 
-If a web API doesn’t provide links that expose relationships and state transitions, following a workflow or completing a task through the API requires a manual sequence of calls that can’t be automated. The result is that consumers *need* all that detailed documentation to hard-code the API structure into their clients.
+When an API doesn’t provide workflow semantics or explicitly navigable state transitions, the same logic tends to end up duplicated on both sides of its interface. Inconsistencies, hacks and bugs proliferate.
 
-This leaves many API designers stuck in a local maxima of the hypermedia maturity heuristic. They get to the point of having nice resource URLs and uniform verbs, but fall short at cohesive link relationships amongst the resources. Without workflow models or navigable state transitions, the same business logic tends to end up duplicated on both sides of the interface. Bugs, hacks and inconsistencies proliferate.
+Implicit and poorly modelled state machines are observable in even the most simple web APIs based on the common CRUD pattern that frameworks like Rails, Backbone and their innumerable tutorials advocate.
+
+Let’s look at a fictitious photo blogging API that follows this pattern, representing collections as JSON arrays containing an object for each posted item:
+
+<pre>
+GET /photoblog/posts
+
+[
+   {
+      "id":3999236232,
+      "caption":"My cat is not impressed",
+      "tags":"expressive cats"
+	  "thumbnail":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
+      "original":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
+   },
+   {
+      "id":6430846656,
+      "caption":"He's in the box!",
+      "tags": "action cats",
+      "thumbnail":"http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
+      "original":"http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
+   }
+]
+</pre>
+
+These cats are so entertaining that their owners are posting thousands of photos documenting their antics. Every funny little face and gesture gets snapped, uploaded and tagged. How do we navigate through this vast array of cats?
+
+If such an API provides pagination and filtering controls, the knowledge of how to use them is out-of-band. We’d have to read through its documentation to discover how many results are returned by default and which parameters allow us to browse and filter the collection.
+
+Using a pagination parameter such as `/photoblog/posts?page=2` is convenient, but we’d need hard-coded logic to increment the page number and we still wouldn’t know when we had reached the last page in the collection. We’d also have to figure out the number of items in the collection overall to know whether or not there are actually multiple pages. If the API provides a count resource, such as `/photoblog/posts/count`, we could poll this separately to figure out whether or not we need to navigate through multiple pages.
+
+This is the way that inconsistencies and hacks spread, bleeding through client code with the same boilerplate logic having to be re-implemented again and again in every application that integrates with the API.
+
+Thinking in endpoints has insidious consequences. It leads us to think about the surface area of APIs in terms of resources being the targets of requests, and de-emphasises the underlying semantic model that the API is intended to provide. In the case of our photoblog API, the collection endpoint is `/photoblog/posts`, the item endpoint is `/photoblog/posts/{id}` and the count endpoint is `/photoblog/posts/count`. The only thing we get from this is a definition of message structure in terms of requests and responses. 
+
+As a result of this design, clients of the photoblog API have to impose their own additional hand-rolled logic to work with pagination as a state machine, despite this being one of the most common use cases for working with the collection of posts.
+
+To make it easier for clients, we can expose pagination explicitly as part of the resource, providing transitions between pages in a format that’s easy to navigate forward and back.
+
+To do this, we need to treat the collection as an object that has associated metadata, rather than just a raw array of items:
+
+<pre>
+GET /photoblog/posts?page=5
+
+{
+   "count":199,
+   "posts":[
+      {
+         "id":3999236232,
+         "caption":"My cat is not impressed",
+         "tags":"expressive cats",
+         "thumbnail":{
+            "href":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
+         },
+         "original":{
+            "href":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
+         }
+      },
+      {
+         "id":6430846656,
+         "caption":"He's in the box!",
+         "tags":"action cats",
+         "thumbnail":{
+            "href":"http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
+         },
+         "original":{
+            "href":"http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
+         }
+      }
+   ],
+   "links":{
+      "self":{
+         "href":"/photoblog/posts"
+      },
+      "next":{
+         "href":"/photoblog/posts?page=6"
+      },
+      "prev":{
+         "href":"/photoblog/posts?page=4"
+      }
+   }
+}
+</pre>
+
+We can take the additional step of separating navigable hyperlinks from generic scalar data types, treating URLs as objects and borrowing the `href` attribute from HTML to make the representation consistent and self-documenting.
+
+State transitions are represented by the `links` object, borrowed from the [HAL specification](http://stateless.co/hal_specification.html). The `count` of items is treated as a first-class attribute of the resource, so that valid knowledge of the collection’s state no longer has to be cobbled together from the results of two separate requests.
+
+Clients no longer have to manage incrementing and decrementing the page count and keeping track of this. They can just follow the `next` and `prev` links to transition between pages.
+
+While pagination might be a somewhat trivial example, it demonstrates the benefits of designing the structure of an API around capabilities and state transitions, rather than plain data.
+
+The pagination example is so simple that it’s easy to overlook the fact that it’s even a state machine at all, but when we do model this explicitly, a whole lot of ambiguity and complexity melts away.
 
 §
 
@@ -31,12 +123,11 @@ Programmers are sometimes criticised by linguists and humanities scholars for wa
 
 How does the language we use to describe web APIs influence the way we think about the design of distributed software? What does it mean to think in resources?
 
-The word ‘endpoint’ is not mentioned once in the entire text of the [Fielding dissertation](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm). It’s a word that has no relevance to the domain of REST and hypermedia, and yet it’s utterly pervasive in the software industry which is moving irrevocably towards REST and hypermedia.
+The word ‘endpoint’ is not mentioned once in the entire text of the [Fielding dissertation](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm). It’s a word that has no relevance to the domain of REST and hypermedia, and yet it’s utterly pervasive in the software industry, despite the fact that in large parts, the industry is moving irrevocably towards REST and hypermedia.
 
 Perhaps this highlights a subtle cognitive dissonance where designers of web APIs prioritise operations and protocols over language and conceptual models.
 
 Thinking in endpoints emphasises the technological envelope. Thinking in resources puts the value first.
-
 
 
 

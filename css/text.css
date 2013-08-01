@@ -1,0 +1,72 @@
+#page { margin: 0 auto 36px auto; }
+
+h1,h2,h3,h4,h5,h6,p,li,blockquote,div,span { font-family: "abril-text", Georgia, serif; color:#260000; }
+
+a {
+	color:#F25B04;
+}
+
+a:hover {
+	color:#F28A30;
+}
+
+body {
+	border-top:9px solid #F2C130;
+}
+
+p {
+	font-size:18px;
+	line-height:26px;
+}
+
+p.meta {
+	font-size:15px;
+}
+
+.subtitle {
+	padding:0 18px 18px 18px;
+	font-style:italic;
+}
+
+#page-title {
+	background-color:#FFFFA0;
+}
+
+h1 {
+	padding:18px 18px 0 18px;	
+	font-style:italic;
+	letter-spacing:1px;
+	font-size:42px;
+	color:#F2C130;
+}
+
+h1 span {
+	font-size:33px;
+	color:#F28A30;
+}
+
+h2 {
+	font-size:46px;
+}
+
+section p {
+	margin-bottom:18px;
+}
+
+p code {
+	color:#567178;
+}
+
+pre {
+	border-radius:9px;
+	background-color:#AEE5F2;
+	color:#283538;
+	font-size:18px;
+	line-height:22px;
+	margin:18px 0;
+	padding:9px;
+}
+
+code, pre {
+	font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
+}
