@@ -35,7 +35,7 @@ GET /photoblog/posts
       "id":3999236232,
       "caption":"My cat is not impressed",
       "tags":"expressive cats"
-	  "thumbnail":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
+      "thumbnail":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
       "original":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
    },
    {
@@ -95,7 +95,7 @@ GET /photoblog/posts?page=5
    ],
    "links":{
       "self":{
-         "href":"/photoblog/posts"
+         "href":"/photoblog/posts?page=5"
       },
       "next":{
          "href":"/photoblog/posts?page=6"
