@@ -1,21 +1,25 @@
 ---
 layout: post
-title:  Endpoints are an anti-pattern
+title:  "Don’t Think in Endpoints"
 date:   2013-07-16 13:16:21
-categories: naming
+categories: api-design
+image:
+  feature: cymked.png
 ---
 
-**It has taken a fair amount of willpower and self-discipline, but in recent weeks I’ve managed to entirely eliminate the word ‘endpoint’ from my software design vocabulary. There are far more coherent and constructive ways of talking about web APIs. This essay explains why I’ve made this decision and the consequences that flow from a mindset of thinking in resources.**
+### What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
 
-The word ‘endpoint’ is scattered everywhere you look throughout the documentation of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
+The word ‘endpoint’ is scattered everywhere you look throughout the descriptions of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
 
-The common usage of endpoint denotes an addressable resource—usually an HTTP accessible URL—but other somewhat contradictory definitions exist. In the enterprise SOA world, there’s a nebulous definition of endpoint as the entry point to an implementation. In the Microsoft world, endpoint is an overloaded term, referring to both target devices for platform services and communications bindings for addressable services. [GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept. The fervid term has spread far and wide across the software industry, leaving [confusion and miscommunication](http://stackoverflow.com/questions/5034412/api-endpoint-semantics) in its wake.
+In common usage, endpoint denotes an addressable resource—usually an HTTP accessible URL—but other somewhat contradictory definitions exist. In the enterprise SOA world, there’s a nebulous definition of endpoint as the entry point to an implementation. In the Microsoft world, endpoint is an overloaded term, referring to both target devices for platform services and communications bindings for addressable services. [GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept. The fervid term has spread far and wide across the software industry, leaving [confusion and miscommunication](http://stackoverflow.com/questions/5034412/api-endpoint-semantics) in its wake.
 
 Most web APIs can easily be described as sets of endpoints. They have identifiers exposed as URLS which form the public surface area of their capabilities. Each URL generally exposes a specific entity within the host system which can receive messages in the form of HTTP requests.
 
-It’s no coincidence that so many APIs designed this way rely on vast amounts of documentation and a myriad of HTTP clients and wrapping libraries in order to be used effectively.
+It’s no coincidence that almost all APIs designed in this way rely on vast amounts of documentation and a myriad of HTTP clients and wrapping libraries in order to be used effectively.
 
-Such APIs seem to be constructed from the assumption that what consumers want is access to discrete sets of data defined as resources. But humans think in terms of processes and relationships; causes and effects. Most useful applications are designed around state machines that can meaningfully manipulate resources, not just generic CRUD interactions. This means that when designing a service, it’s crucial to focus on the transitions between resources and model relationships where the meaning of a resource is defined by reference to other resources. Exposing data with a uniform interface of verbs acting on nouns isn’t enough. 
+Such APIs seem to be constructed from the assumption that what clients want is the ability to query data defined as resources. But humans think in terms of processes and relationships; causes and effects. Most useful applications are designed around state machines that can meaningfully manipulate resources, not just generic CRUD interactions.
+
+These human habits mean that when designing a service, it’s crucial to focus on the transitions between resources and model relationships where the meaning of a resource is defined by reference to other resources. Exposing data with a uniform interface of verbs acting on nouns isn’t enough. 
 
 If a service doesn’t provide links that expose activities and relationships as state transitions, following a workflow or completing a task through an API requires a manual sequence of calls that can’t be automated. The result is that consumers *need* all that detailed documentation to hard-code the API structure into their clients.
 
