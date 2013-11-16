@@ -1,17 +1,19 @@
 ---
 layout: post
 title:  "Don’t Think in Endpoints"
-date:   2013-07-16 13:16:21
-categories: api-design
+categories: language
+tags: ["API Design", "Hypermedia", "Cognitive Dissonance"]
 image:
-  feature: cymked.png
+  feature: dont-think-in-endpoints.jpg
+  credit: Alexander Klink
+  creditlink: http://commons.wikimedia.org/wiki/File:603qm_Wegweiser.jpg
 ---
 
-### What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
+What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
 
 The word ‘endpoint’ is scattered everywhere you look throughout the descriptions of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
 
-In common usage, endpoint denotes an addressable resource—usually an HTTP accessible URL—but other somewhat contradictory definitions exist. In the enterprise SOA world, there’s a nebulous definition of endpoint as the entry point to an implementation. In the Microsoft world, endpoint is an overloaded term, referring to both target devices for platform services and communications bindings for addressable services. [GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept. The fervid term has spread far and wide across the software industry, leaving [confusion and miscommunication](http://stackoverflow.com/questions/5034412/api-endpoint-semantics) in its wake.
+In common usage, an endpoint is an addressable resource—usually an HTTP accessible URL—but other somewhat contradictory definitions exist. In the enterprise SOA world, there’s a nebulous definition of endpoint as the entry point to an implementation. In the Microsoft world, endpoint is an overloaded term, referring to both target devices for platform services and communications bindings for addressable services. [GitHub V3](http://developer.github.com/v3/) mentions endpoints and hypermedia in the same breath. Google has even modelled [entire services](https://developers.google.com/appengine/docs/python/endpoints/) on the concept. The fervid term has spread far and wide across the software industry, leaving [confusion and miscommunication](http://stackoverflow.com/questions/5034412/api-endpoint-semantics) in its wake.
 
 Most web APIs can easily be described as sets of endpoints. They have identifiers exposed as URLS which form the public surface area of their capabilities. Each URL generally exposes a specific entity within the host system which can receive messages in the form of HTTP requests.
 

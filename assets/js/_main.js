@@ -23,7 +23,7 @@ $('#site-nav').click(function(event){
     event.stopPropagation();
 });
 
-// FitVids options
+// FitVids and FitText
 $(function() {
 	$("article").fitVids();
 });

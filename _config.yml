@@ -8,7 +8,7 @@ search:           false
 
 # Owner/author information
 owner:
-  name:           "@maetl"
+  name:           "Mark Rickerby"
   avatar:         bio-photo.jpg
   email:          me@maetl.net
   # Social networking links used in footer. Update and remove as you like.
@@ -32,22 +32,24 @@ bing_verify:
 # Links to include in top navigation
 # For external links add external: true
 links:
+  - title: Off by One
+    url: /
+  - title: Language
+    url: /language/
   - title: About
     url: /about/
-  - title: API Design
-    url: /api-design/
   # - title: Made Mistakes
   #   url: http://mademistakes.com
   #   external: true
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
+timezone:    Australia/Sydney
 future:      true
 pygments:    true
 markdown:    kramdown
 
 # https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink:   /:categories/text/:title/
+permalink:   /:categories/:title/
 
 kramdown:
   auto_ids: true
