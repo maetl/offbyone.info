@@ -16,8 +16,7 @@
     {% if page.image.feature %}<img src="{{ site.url }}/images/{{ page.image.feature }}" class="entry-feature-image" alt="{{ page.title }}" itemprop="image">{% if page.image.credit %}<p class="image-credit">Photo Credit: <a href="{{ page.image.creditlink }}">{{ page.image.credit }}</a></p>{% endif %}{% endif %}
     <div id="text" class="entry-wrapper">
       <header class="entry-header">
-		  <span class="tags">Recommended Reading</span>
-          <h1 class="entry-title" itemprop="headline"><a href="{{ page.link }}">{% if page.headline %}{{ page.headline }}{% else %}{{ page.title }}{% endif %} <span class="link-arrow">&rarr;</span></a></h1>
+          <h1 class="entry-title" itemprop="headline"><span><a href="{{ page.link }}">{% if page.headline %}{{ page.headline }}{% else %}{{ page.title }}{% endif %} <span class="link-arrow">&rarr;</span></a></span></h1>
       </header>
       <footer class="entry-meta">
         <span class="author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">By <span itemprop="name" class="fn">{{ page.author }}</span></span>

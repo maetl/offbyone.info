@@ -9,7 +9,7 @@ image:
   creditlink: http://commons.wikimedia.org/wiki/File:603qm_Wegweiser.jpg
 ---
 
-## What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
+## What happens when we eliminate the word ‘endpoint’ from the process of designing and documenting web APIs?
 
 The word ‘endpoint’ is scattered everywhere you look throughout the descriptions of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
 
