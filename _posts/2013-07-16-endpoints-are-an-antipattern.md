@@ -9,7 +9,7 @@ image:
   creditlink: http://commons.wikimedia.org/wiki/File:603qm_Wegweiser.jpg
 ---
 
-What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
+## What happens when we eliminate the word ‘endpoint’ when designing and documenting web APIs?
 
 The word ‘endpoint’ is scattered everywhere you look throughout the descriptions of popular web APIs, irrespective of where they fall on the [hypermedia maturity continuum](http://www.crummy.com/writing/speaking/2008-QCon/act3.html).
 
@@ -33,26 +33,24 @@ Implicit and poorly modelled state machines are observable in even the most simp
 
 Let’s look at a fictitious photo blogging API that follows this pattern, representing collections as JSON arrays containing an object for each posted item:
 
-<pre>
-GET /photoblog/posts
+> GET /photoblog/posts
 
+{% highlight javascript %}
 [
    {
       "id":3999236232,
       "caption":"My cat is not impressed",
-      "tags":"expressive cats"
       "thumbnail":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
       "original":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
    },
    {
       "id":6430846656,
       "caption":"He's in the box!",
-      "tags": "action cats",
       "thumbnail":"http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
       "original":"http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
    }
 ]
-</pre>
+{% endhighlight %}
 
 These cats are so entertaining that their owners are posting thousands of photos documenting their antics. Every funny little face and gesture gets snapped, uploaded and tagged. How do we navigate through this vast array of cats?
 
@@ -60,26 +58,27 @@ If such an API provides pagination and filtering controls, the knowledge of how 
 
 Using a pagination parameter such as `/photoblog/posts?page=2` is convenient, but we’d need hard-coded logic to increment the page number and we still wouldn’t know when we had reached the last page in the collection. We’d also have to figure out the number of items in the collection overall to know whether or not there are actually multiple pages. If the API provides a count resource, such as `/photoblog/posts/count`, we could poll this separately to figure out whether or not we need to navigate through multiple pages.
 
-This is the way that inconsistencies and hacks spread, bleeding through client code with the same boilerplate logic having to be re-implemented again and again in every application that integrates with the API.
+Thinking in endpoints has insidious consequences. It leads us to think about the surface area of our API in terms of resources being the targets of requests, and de-emphasises the underlying semantic model that the API is intended to provide. In the case of our photoblog, the collection endpoint is `/photoblog/posts`, the item endpoint is `/photoblog/posts/{id}` and the count endpoint is `/photoblog/posts/count`. The only thing we get from this is a definition of tabular data in terms of requests and responses. 
 
-Thinking in endpoints has insidious consequences. It leads us to think about the surface area of APIs in terms of resources being the targets of requests, and de-emphasises the underlying semantic model that the API is intended to provide. In the case of our photoblog API, the collection endpoint is `/photoblog/posts`, the item endpoint is `/photoblog/posts/{id}` and the count endpoint is `/photoblog/posts/count`. The only thing we get from this is a definition of message structure in terms of requests and responses. 
+Congratulations. We’ve just duplicated the structure of our relational database in HTTP and JSON.
 
 As a result of this design, clients of the photoblog API have to impose their own additional hand-rolled logic to work with pagination as a state machine, despite this being one of the most common use cases for working with the collection of posts.
+
+This is the way that inconsistencies and hacks spread, bleeding through client code with the same boilerplate logic having to be re-implemented again and again in every application that integrates with the API.
 
 To make it easier for clients, we can expose pagination explicitly as part of the resource, providing transitions between pages in a format that’s easy to navigate forward and back.
 
 To do this, we need to treat the collection as an object that has associated metadata, rather than just a raw array of items:
 
-<pre>
-GET /photoblog/posts?page=5
+> GET /photoblog/posts?page=5
 
+{% highlight javascript %}
 {
    "count":199,
    "posts":[
       {
          "id":3999236232,
          "caption":"My cat is not impressed",
-         "tags":"expressive cats",
          "thumbnail":{
             "href":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
          },
@@ -90,7 +89,6 @@ GET /photoblog/posts?page=5
       {
          "id":6430846656,
          "caption":"He's in the box!",
-         "tags":"action cats",
          "thumbnail":{
             "href":"http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
          },
@@ -111,7 +109,7 @@ GET /photoblog/posts?page=5
       }
    }
 }
-</pre>
+{% endhighlight %}
 
 We can take the additional step of separating navigable hyperlinks from generic scalar data types, treating URLs as objects and borrowing the `href` attribute from HTML to make the representation consistent and self-documenting.
 
@@ -123,7 +121,7 @@ While pagination might be a somewhat trivial example, it demonstrates the benefi
 
 The pagination example is so simple that it’s easy to overlook the fact that it’s even a state machine at all, but when we do model this explicitly, a whole lot of ambiguity and complexity melts away.
 
-§
+--
 
 Programmers are sometimes criticised by linguists and humanities scholars for wantonly invoking the [Sapir-Whorf hypothesis](https://en.wikipedia.org/wiki/Linguistic_relativity) to describe different mental models that emerge from using different programming languages. Discredited by the rise of linguistic universalism, the idea that language shapes thought is [still an open question](http://edge.org/conversation/how-does-our-language-shape-the-way-we-think), though it has had a [lasting influence](http://web.archive.org/web/20110710183418/http://elliscave.com/APL_J/tool.pdf) on the evolution of programming languages. The widespread acceptance of this idea in the software industry is largely due to the popularity of Paul Graham’s [essay about the Blub paradox](http://www.paulgraham.com/avg.html).
 
@@ -131,7 +129,7 @@ How does the language we use to describe web APIs influence the way we think abo
 
 The word ‘endpoint’ is not mentioned once in the entire text of the [Fielding dissertation](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm). It’s a word that has no relevance to the domain of REST and hypermedia, and yet it’s utterly pervasive in the software industry, despite the fact that in large parts, the industry is moving irrevocably towards REST and hypermedia.
 
-Perhaps this highlights a subtle cognitive dissonance where designers of web APIs prioritise operations and protocols over language and conceptual models.
+Perhaps this highlights a subtle cognitive dissonance where designers of web APIs prioritise operations and protocols over language, conceptual models and business value.
 
 Thinking in endpoints emphasises the technological envelope. Thinking in resources puts the value first.
 

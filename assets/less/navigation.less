@@ -1,0 +1,79 @@
+.navigation-wrapper {
+	text-align: center;
+
+	ul {
+		vertical-align: top;
+		margin: 0;
+		padding: 8px 24px;
+		.clearfix();
+		background-color: @black;
+	}
+
+	li {
+		display: block;
+		float: left;
+		list-style: none;
+		text-align: center;
+		.font-rem(24);
+		font-family: @alt-font;
+		color: @yellow;
+		a:hover {
+			.box-shadow(@shadow: inset 0 0 1px @white);
+		}
+	}
+
+	a {
+		display: block;
+		padding: 8px 20px;
+		color: @yellow;
+		.rounded(2px);
+		&:hover {
+			background-color: lighten(@black, 5);
+		}
+	}
+}
+
+// Responsive nav toggle stuff
+#site-nav {
+	z-index: 9000;
+	display: none;
+	@media @medium {
+		-webkit-animation-duration: 1s;
+		-moz-animation-duration: 1s;
+		-o-animation-duration: 1s;
+		animation-duration: 1s;
+	}
+	&.closed {
+		@media @medium {
+			display: block;
+		}
+	}
+	&.opened {
+		display: block;
+		max-height: 100%;
+		li {
+			float: none;
+			@media @medium {
+				float: left;
+			}
+		}
+	}
+}
+.no-js #site-nav {
+	display: block;
+}	
+#nav-toggle { 
+	z-index: 9999;
+	display: block;
+	vertical-align: top;
+	margin: 0;
+	padding: 4px 20px;
+	background-color: @black;
+	.rounded(0);
+	@media @small {
+		background-color: @black;		
+	}
+	@media @medium {
+		display: none;
+	}
+}

@@ -1,12 +1,14 @@
 ---
-layout: page
+layout: home
 title: Latest Posts
 description: "A simple and clean responsive Jekyll theme for words and photos."
-tags: [Jekyll, theme, themes, responsive, blog, minimalism]
 ---
 
-<ul class="post-list">
-{% for post in site.posts limit:10 %} 
-  <li><article><a href="{{ site.url }}{{ post.url }}">{{ post.title }} <span class="entry-date"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time></span></a></article></li>
+<div class="posts-mosaic">
+{% for post in site.posts limit:12 %}
+	<article>
+		{% if post.image.feature %}<a href="{{ site.url }}{{ post.url }}"><img src="{{ site.url }}/images/{{ post.image.feature }}" alt="{{ post.title }}" itemprop="image"></a>{% endif %}
+			<h2><a href="{{ site.url }}{{ post.url }}"><span>{{ post.title }}</span></a></h2>		
+	</article>
 {% endfor %}
-</ul>
+</div>
