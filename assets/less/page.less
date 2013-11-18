@@ -298,11 +298,36 @@ img + h2 {
 	}
 }
 
+.about-wrapper {
+	.clearfix();
+	margin-bottom:0;
+}
+
 .col-a {
 	margin:0;
-	width:50%;
+	width:40%;
 	float:left;
-	.clearfix()
+	.clearfix();
+	background-color: @yellow;
+	height:800px;
+}
+
+.col-b {
+	margin:0;
+	width:60%;
+	float:left;
+	.clearfix();
+	height:800px;
+}
+
+.about {
+	margin:60px;
+	display:block;
+	text-align:center;
+}
+
+.about .icon-bug {
+	font-size:420px;
 }
 
 // Search
@@ -323,15 +348,16 @@ img + h2 {
 // --------------------------------------------------
 .footer-wrapper {
 	.clearfix();
-	margin: 2em auto;
 	text-align: center;
 	font-family: @alt-font;
 	.font-rem(14);
 	font-style: italic;
-	color: lighten(@text-color,20);
+	color: lighten(@text-color,40);
 	a {
-		color: lighten(@text-color,20);
+		color: lighten(@text-color,40);
 	}
+	background-color: @text-color;
+	padding: 2em 0 4em 0;
 }
 
 // Social Icons
@@ -340,7 +366,7 @@ img + h2 {
 	margin: 1em 0 2em;
 	a {
 		padding: 4px 8px;
-		&:hover { color:@black; }
+		&:hover { color: @text-color; }
 	}
 }
 
@@ -382,3 +408,4 @@ img + h2 {
 		color: @black;
 	}
 }
+

@@ -64,21 +64,25 @@ svg:not(:root) {
 // Buttons
 // --------------------------------------------------
 .btn {
+  font-family: @alt-font;
   display: inline-block;
   margin-bottom: 20px;
   padding: 8px 20px;
   .font-rem(14);
   background-color: @black;
-  color: @white;
+  color: @yellow;
   border: 2px solid @black !important;
-  .rounded(20px);
-  &:visited {
-    color: @white;
-  }
   &:hover {
-    background-color: @white;
-    color: @black;
+	.box-shadow(@shadow: inset 0 0 1px @white);
+	background-color: lighten(@black, 2);
   }
+  a, i {
+    color: @yellow;
+  }
+}
+
+.pagination a.btn {
+	color: @yellow;
 }
 
 // Well
