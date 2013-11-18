@@ -1,12 +1,12 @@
 ---
 layout: page
-permalink: /language/
-title: Language
-description: "An archive of posts on language."
+permalink: /culture/
+title: Culture
+description: "An archive of posts on culture."
 ---
 
 <div class="posts-mosaic">
-{% for post in site.categories.language %}
+{% for post in site.categories.culture %}
 	<article>
 		{% if post.image.feature %}<a href="{{ site.url }}{{ post.url }}"><img src="{{ site.url }}/images/{{ post.image.feature }}" alt="{{ post.title }}" itemprop="image"></a>{% endif %}
 			<h2><a href="{{ site.url }}{{ post.url }}"><span>{{ post.title }}</span></a></h2>		
