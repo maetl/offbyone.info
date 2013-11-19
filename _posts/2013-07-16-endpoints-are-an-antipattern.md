@@ -45,7 +45,9 @@ I suggest that the basis of such an intellectual framework should start with the
 
 Steve Klabnik has done a fantastic job of expressing this view in [Designing Hypermedia APIs](http://www.designinghypermediaapis.com/), but there’s still a paucity of explanations and examples of web APIs that demonstrate what this means in practice.
 
-It’s actually not very hard to find examples.
+---
+
+It’s not at all hard to find examples.
 
 Implicit and poorly modelled state machines are observable in even the most simple web APIs based on the common CRUD pattern that frameworks like Rails, Backbone and their innumerable tutorials advocate.
 
@@ -70,17 +72,17 @@ Let’s look at a fictional photo blogging API that exhibits shades of this anti
 ]
 {% endhighlight %}
 
-Look at these cats! They’re so entertaining, their owners are posting thousands of photos documenting their antics. Every funny little face gets snapped, uploaded and tagged. How do we navigate through this vast array of felids?
+Look at these cats! They’re just so entertaining that their owners are posting thousands of photos documenting their antics. Every funny little face gets snapped, uploaded and tagged. How do we navigate through this vast array of felids?
 
-If such an API provides pagination and filtering controls, the description of how to use them is out-of-band. Clients would have to read through documentation to discover how many results are returned by default and which parameters allow us to browse and filter the collection.
+If this API provides pagination and filter controls, the description of how to use them is out-of-band. Clients will have to read through documentation or manually experiment to discover how many results are returned by default and which parameters allow paging and filtering thorough the collection.
 
-Providing a pagination parameter such as `/photoblog/posts?page=2` is convenient, but clients would need hard-coded logic to increment the page number and they still wouldn’t know when we had reached the last page in the collection. They’d also have to figure out the number of items in the collection overall to know whether or not there are actually multiple pages. Some APIs provide a separate count resource, such as `/photoblog/posts/count`. If we provided this, clients could poll in a separate request to figure out whether or not we need to navigate through multiple pages. This defies common sense. 
+A pagination parameter such as `/photoblog/posts?page=2` is convenient and probably guessable, but clients would need hard-coded logic to increment this page number and they still wouldn’t know when they had reached the last page in the collection. They’d also have to figure out the number of items in the collection overall to know whether or not there are actually multiple pages. Some APIs provide a separate count resource, such as `/photoblog/posts/count`. If we provided this, clients could poll in a separate request to figure out whether or not they need to navigate through multiple pages. The incidental complexity that results from the use of this single, obvious parameter defies common sense.
 
-Thinking in endpoints has insidious consequences. It leads us to see the surface area of APIs in terms of resources being the targets of requests, and de-emphasises the underlying semantic model that the APIs are intended to provide.
+Thinking in endpoints has insidious consequences. It leads us to see the surface area of an API in terms of resources being nothing more than the targets of requests, and de-emphasises the underlying semantic model that the API is intended to provide.
 
-When we think of this API in terms of resource types, we see the ‘collection endpoint’ as `/photoblog/posts`, the ‘post endpoint’ as `/photoblog/posts/{id}` and the ‘count endpoint’ as `/photoblog/posts/count`. The only thing clients get from this is a hard-coded interface to specific data queries through a parameterized coupling that must be known in advance.
+When we think of the photoblog API as nothing more than resource types, we see `/photoblog/posts` as the ‘collection endpoint’ returning an array; `/photoblog/posts/{id}` as the ‘post endpoint’ returning an object; and `/photoblog/posts/count` as the ‘count endpoint’ returning an integer. The result is a hard-coded interface to specific data queries through a parameterized coupling that must be known in advance.
 
-Congratulations. We’ve just awkwardly surfaced the structure of our relational database queries through HTTP and JSON.
+Congratulations. We’ve just awkwardly reproduced the structure of our relational database queries through HTTP and JSON.
 
 As a result of this design, clients of the photoblog API have to impose their own additional hand-rolled logic to work with pagination as a state machine, despite it being one of the most common use cases for working with the collection of posts.
 
@@ -95,28 +97,31 @@ To do this, we need to treat the collection as an object that has associated met
 {% highlight javascript %}
 {
    "count": 199,
-   "posts": [
-      {
-         "id": 3999236232,
-         "caption": "My cat is not impressed",
-         "thumbnail": {
-            "href":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
+   "collection": {
+      "resource": "posts",
+      "items": [
+         {
+            "id": 3999236232,
+            "caption": "My cat is not impressed",
+            "thumbnail": {
+               "href":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
+            },
+            "original": {
+               "href":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
+            }
          },
-         "original": {
-            "href":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
+         {
+            "id": 6430846656,
+            "caption": "He's in the box!",
+            "thumbnail": {
+               "href": "http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
+            },
+            "original": {
+               "href": "http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
+            }
          }
-      },
-      {
-         "id": 6430846656,
-         "caption": "He's in the box!",
-         "thumbnail": {
-            "href": "http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
-         },
-         "original": {
-            "href": "http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
-         }
-      }
-   ],
+      ],
+   },
    "links":{
       "self":{
          "href": "/photoblog/posts?page=5"

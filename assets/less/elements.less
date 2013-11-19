@@ -1,11 +1,33 @@
-hr { 
+hr {
     display: block; 
-    margin: 1em 0; 
+    margin: 2em 0; 
     padding: 0;
-    height: 1px; 
+    height: 0px; 
     border: 0; 
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #fff; 
+	text-align: center;
+	line-height: 0px;
+	font-size: 1.3em;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+ 	-ms-box-sizing: content-box;
+ 	-o-box-sizing: content-box;
+ 	box-sizing: content-box;
+}
+
+hr:after {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  //content: "§";
+  //content: "\f078";
+  content: "\f188";
+  color: lighten(@text-color, 10);
+  display: inline;
+  background-color: @body-color;
+  padding: 0 0.5em;
 }
 
 // Figures and images
