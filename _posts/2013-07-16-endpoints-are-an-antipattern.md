@@ -97,32 +97,29 @@ To do this, we need to treat the collection as an object that has associated met
 {% highlight javascript %}
 {
    "count": 199,
-   "collection": {
-      "resource": "posts",
-      "items": [
-         {
-            "id": 3999236232,
-            "caption": "My cat is not impressed",
-            "thumbnail": {
-               "href":"http://cdn.pblg/3999236232/q8ho6wborc.jpg"
-            },
-            "original": {
-               "href":"http://cdn.pblg/3999236232/l53gmg4idq.jpg"
-            }
+   "collection": [
+      {
+         "href": "/photoblog/posts/3999236232",
+         "caption": "My cat is not impressed",
+         "thumbnail": {
+            "href": "http://cdn.pblg/3999236232/q8ho6wborc.jpg"
          },
-         {
-            "id": 6430846656,
-            "caption": "He's in the box!",
-            "thumbnail": {
-               "href": "http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
-            },
-            "original": {
-               "href": "http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
-            }
+         "original": {
+            "href": "http://cdn.pblg/3999236232/l53gmg4idq.jpg"
          }
-      ],
-   },
-   "links":{
+      },
+      {
+         "href": "/photoblog/posts/6430846656",
+         "caption": "He's in the box!",
+         "thumbnail": {
+            "href": "http://cdn.pblg/6430846656/tnlcvngk9j.jpg"
+         },
+         "original": {
+            "href": "http://cdn.pblg/6430846656/ai0nef5r5n.jpg"
+         }
+      }
+   ],
+   "links": {
       "self":{
          "href": "/photoblog/posts?page=5"
       },
@@ -136,15 +133,17 @@ To do this, we need to treat the collection as an object that has associated met
 }
 {% endhighlight %}
 
-We can take the additional step of separating navigable hyperlinks from generic scalar data types, treating URLs as objects and borrowing the `href` attribute from HTML to make the representation consistent and self-documenting.
+There are a lot of things about this representation that could be improved, but for simplicity’s sake, let’s focus on pagination and references to other resources.
+
+The first thing we can do is separate navigable hyperlinks from generic scalar data types, treating URLs as objects and borrowing the `href` attribute from HTML to make the representation consistent and self-documenting. With each post having a unique hyperlink, we no longer need an explicit `id` attribute to define their identity. In some cases, we might still want to include an `id` field, but more often than not, this promulgates unnecessary coupling between API clients and back-end databases. Here, providing a hyperlink is enough.
 
 State transitions are represented by the `links` object, borrowed from the [HAL specification](http://stateless.co/hal_specification.html). The `count` of items is treated as a first-class attribute of the resource, so that valid knowledge about the collection no longer has to be cobbled together from the results of two separate requests.
 
-Clients can avoid having to manage incrementing and decrementing the page count and keeping track of this state. Instead, they can follow the `next` and `prev` links to transition between pages.
+Now, clients can avoid having to manage incrementing and decrementing the page count and keeping track of this state. Instead, they can follow the `next` and `prev` links to transition between pages.
 
-While pagination might be a somewhat trivial example, it demonstrates the benefits of designing the structure of an API around capabilities and state transitions, rather than plain nouns-as-data.
+While pagination might be a somewhat trivial example, it demonstrates the benefits of designing the structure of an API around capabilities and state transitions, rather than nouns-as-data.
 
-The pagination example is so simple that it’s easy to overlook the fact that it’s even a state machine at all, but when we do model this explicitly, a whole lot of ambiguity and complexity melts away.
+The pagination links are so simple, it’s easy to overlook the fact they’re even a state machine at all, but when we do model this explicitly, a whole lot of ambiguity and complexity melts away.
 
 ---
 
