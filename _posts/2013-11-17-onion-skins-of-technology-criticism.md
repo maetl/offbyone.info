@@ -42,6 +42,8 @@ It’s interesting then, to see how unproductive behaviour is so often framed as
 
 Focusing exclusively on individual failure and egotism functions to preserve and reinforce the status of dominant groups in the technology industry, and avoids criticism of toxic management and power structures, where people fight over trivial matters as a consequence of frustration and disempowerment.
 
+See also: http://www.washingtonpost.com/blogs/wonkblog/wp/2014/01/10/the-depressing-psychological-theory-that-explains-washington/
+
 ## Demonstrating Technical Prowess
 
 From the [Jargon File](http://catb.org/~esr/jargon/html/H/holy-wars.html):
